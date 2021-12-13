@@ -1,10 +1,16 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import style from './ContactForm.module.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { addContact } from '../../redux/actions';
 
-const ContactForm = ({ onSubmit }) => {
+const ContactForm = () => {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
+    const dispatch = useDispatch();
+    const contacts = useSelector(state => state.contacts);
 
     const handleInputChange = event => {
         const { name, value } = event.target;
@@ -14,9 +20,23 @@ const ContactForm = ({ onSubmit }) => {
 
     const handleSubmit = event => {
         event.preventDefault();
-        onSubmit(name, number);
         setName('');
         setNumber('');
+
+        const doubleContact = contacts.find(
+            contact => contact.name.toLowerCase() === name.toLowerCase(),
+        );
+
+        if (!name || !number) {
+            toast.error('Invalid name or number value!');
+        }
+
+        if (doubleContact) {
+            toast.error(`${name} is already in contacts`);
+            return;
+        }
+
+        dispatch(addContact(name, number));
     };
 
     return (
@@ -56,6 +76,7 @@ const ContactForm = ({ onSubmit }) => {
             <button type="submit" className={style.formButton}>
                 Add contact
             </button>
+            <ToastContainer autoClose={2000} />
         </form>
     );
 };
