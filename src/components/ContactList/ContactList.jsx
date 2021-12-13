@@ -2,22 +2,20 @@ import PropTypes from 'prop-types';
 import ContactItem from '../ContactItem';
 import style from './ContactList.module.css';
 
-const ContactList = ({ contacts, onDeleteContact }) => {
-    return (
-        <ol className={style.orderList}>
-            {contacts.map(({ id, name, number }) => (
-                <li key={id} className={style.contactListItem}>
-                    <ContactItem
-                        name={name}
-                        number={number}
-                        id={id}
-                        onDelete={onDeleteContact}
-                    />
-                </li>
-            ))}
-        </ol>
-    );
-};
+const ContactList = ({ contacts, onDeleteContact }) => (
+    <ol className={style.orderList}>
+        {contacts.map(({ id, name, number }) => (
+            <li key={id} className={style.contactListItem}>
+                <ContactItem
+                    name={name}
+                    number={number}
+                    id={id}
+                    onDelete={onDeleteContact}
+                />
+            </li>
+        ))}
+    </ol>
+);
 
 ContactList.propTypes = {
     contacts: PropTypes.arrayOf(
